@@ -134,7 +134,7 @@ if ( !empty( $photos ) ) {
 
             // if we're in a browser, output the code for the photo tile, with the thumbnail as a background.
             if ( !is_cli() ) {
-                ?><a href="<?php print $photo ?>" class="photo" style="background-image: url(_<?php print $photo ?>);"></a><?php
+                ?><a href="<?php print $photo ?>" class="photo" style="background-image: url('_<?php print $photo ?>');"></a><?php
             }
         }
     }
@@ -148,4 +148,3 @@ if ( !is_cli() ) {
 </html>
 <?php
 }
-
