@@ -6,6 +6,12 @@
   being used in CLI or browser, and either outputs a log, or the gallery
   itself, generating thumbnails as it goes. 
  ***********************************************************************/
+ 
+class CONFIG
+{
+    const THUMBNAIL_DIR = "thumbnails/"; // Folder to store the thumbnails, use "./" for no subfolder
+    const GRAY_FILTER = False; // Add gray filter on thumbnails
+};
 
 // small function to generate thumbnails
 function make_thumb( $src, $dest, $desired_width ) {
@@ -59,9 +65,13 @@ if ( !is_cli() ) {
         box-sizing: border-box;
     }
     .no-touch .photo {
+        <?php if (CONFIG::GRAY_FILTER) {
+        print '
         filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 10+, Firefox on Android */
         filter: gray; /* IE6-9 */
-        -webkit-filter: grayscale( 100% ); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+        -webkit-filter: grayscale( 100% ); /* Chrome 19+, Safari 6+, Safari 6+ iOS */ ';
+        }
+        ?>
         opacity: .7;
         transition: all 400ms ease-in-out;
     }
@@ -100,6 +110,10 @@ if ( !is_cli() ) {
 }
 
 
+if (!is_dir(CONFIG::THUMBNAIL_DIR)) {
+    mkdir(CONFIG::THUMBNAIL_DIR, 0777, true);
+}
+
 // scan the current directory to get a list of files.
 $photos = scandir( '.' );
 
@@ -122,7 +136,7 @@ if ( !empty( $photos ) ) {
             if ( in_array( strtolower($ext), array( 'jpg', 'jpeg' ) ) && substr( $photo, 0, 1 ) != '_' ) { 
 
             // set the destination for the thumbnail file
-            $thumb = './_' . $photo;
+            $thumb = './' .  CONFIG::THUMBNAIL_DIR . '_' . $photo;
 
             // only generate a thumbnail if one doesn't already exist, logging if in cli
             if ( !file_exists( $thumb ) ) {
@@ -134,7 +148,8 @@ if ( !empty( $photos ) ) {
 
             // if we're in a browser, output the code for the photo tile, with the thumbnail as a background.
             if ( !is_cli() ) {
-                ?><a href="<?php print $photo ?>" class="photo" style="background-image: url('_<?php print $photo ?>');"></a><?php
+                ?><a href="<?php print $photo ?>" class="photo" style="background-image: url('<?php print CONFIG::THUMBNAIL_DIR . '_' . $photo ?>');"></a><?php
+                echo "\n";
             }
         }
     }
