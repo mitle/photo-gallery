@@ -13,7 +13,7 @@ Live demo: http://gallery.jpederson.com
 To quickly install the script from the command line, navigate to the directory you'd like to install this script to (inside a folder of photos), and execute the following command.
 
 ```
-curl -O https://raw.githubusercontent.com/jpederson/photo-gallery/master/index.php
+curl -O https://raw.githubusercontent.com/mitle/photo-gallery/master/index.php
 ```
 
 And then, while you're in the command line, run the index.php file to pre-generate all the thumbnails for this gallery. See notes below in the 'Generating Thumbnails' section to see why it's better to pre-generate your thumbnails via the command line.
